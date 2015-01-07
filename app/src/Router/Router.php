@@ -5,6 +5,14 @@ namespace App\Router;
 use App\Router\Interfaces\UriMatcher;
 use Auryn\Provider AS Container;
 
+/**
+ * Class Router
+ * @package App\Router
+ *
+ * temporary Router dummy to test
+ * dispatching
+ */
+
 class Router implements Interfaces\Router {
 
 	protected $matcher;
@@ -15,16 +23,36 @@ class Router implements Interfaces\Router {
 		$this->matcher = $matcher;
 	}
 
+    /**
+     * @param $uri
+     * @param $action
+     *
+     * Registers a GET Route
+     */
 	public function get( $uri, $action )
 	{
 		$this->routes['GET'][$uri] = $action;
 	}
 
-	public function post()
+    /**
+     * @param $uri
+     * @param $action
+     *
+     * Registers a POST Route
+     */
+	public function post( $uri, $action )
 	{
-		echo "Post Route";
+		$this->routes['POST'][$uri] = $action;
 	}
 
+    /**
+     * @param Container $container
+     * @return mixed
+     *
+     * Matches the given URI against a map of declared
+     * routes and executes either a closure or a controller
+     * method.
+     */
 	public function dispatch( Container $container )
 	{
 		$action = $this->matcher->find( $this->routes );
@@ -39,11 +67,24 @@ class Router implements Interfaces\Router {
 		}
 	}
 
+    /**
+     * @param callable $callable
+     * @return mixed
+     *
+     * Executes a callable
+     */
 	protected function executeCallable( Callable $callable )
 	{
 		return $callable();
 	}
 
+    /**
+     * @param $action
+     * @param Container $container
+     * @return mixed
+     *
+     * Resolves a controller out of the DI-Container
+     */
 	protected function executeMethod( $action, Container $container )
 	{
         $controller_name = key($action);

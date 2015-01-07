@@ -5,6 +5,14 @@ namespace App\Router;
 use App\Request\Request;
 use App\Request\Exceptions\HttpNotFoundException;
 
+/**
+ * Class UriMatcher
+ * @package App\Router
+ *
+ * Matches an URI against a map of
+ * given routes
+ */
+
 class UriMatcher implements Interfaces\UriMatcher {
 	
 	protected $request;
@@ -14,6 +22,14 @@ class UriMatcher implements Interfaces\UriMatcher {
 		$this->request = $request;
 	}
 
+    /**
+     * @param $routes
+     * @return mixed
+     * @throws HttpNotFoundException
+     *
+     * Checks for a specific route in a map
+     * of given routes
+     */
 	public function find( $routes )
 	{
 		$uri = '/' . trim( $this->request->getPathInfo(), '/' );
