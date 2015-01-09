@@ -16,7 +16,8 @@ class PersistenceManager {
 
     protected $pdo;
     protected $inflector;
-    protected $map = [];
+
+    protected $configurator;
 
     public function __construct( PDO $pdo )
     {
@@ -26,15 +27,13 @@ class PersistenceManager {
     public function persist( $object )
     {
         $this->inflector = new PersistenceInflector( $object );
-        $this->mapProperties();
+        $this->createConfigurator();
     }
 
-    protected function mapProperties()
+    protected function createConfigurator()
     {
-        $props = $this->inflector->getTraitProperties();
-        var_dump($props);
-
-        var_dump($this->inflector->getClassProperties());
+        $this->configurator = new ConfigurationStore( $this->pdo, $this->inflector->getTraitProperties(), $this->inflector->getClassProperties() );
+        var_dump($this->configurator);
     }
 
 }
