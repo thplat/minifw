@@ -31,13 +31,10 @@ class PersistenceManager {
 
     protected function mapProperties()
     {
-        $props = $this->persistenceInflector->getProperties();
+        $props = $this->inflector->getTraitProperties();
+        var_dump($props);
 
-        foreach( $props AS $prop )
-        {
-            $prop->setAccessible(true);
-            $this->map[$prop->name] = $prop->getValue( $object );
-        }
+        var_dump($this->inflector->getClassProperties());
     }
 
 }
