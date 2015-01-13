@@ -19,21 +19,30 @@ class PersistenceManager {
 
     protected $configurator;
 
-    public function __construct( PDO $pdo )
+    public function __construct( PDO $pdo, ActionFactory $actionFactory )
     {
         $this->pdo = $pdo;
     }
 
     public function persist( $object )
     {
-        $this->inflector = new PersistenceInflector( $object );
-        $this->createConfigurator();
+        $this->createConfigurator( $object );
     }
 
-    protected function createConfigurator()
+    /**
+     * @param $object
+     * @throws Exceptions\ConfigurationTraitNotFoundException
+     *
+     * Creates an ORM Configuration Object or returns
+     * the current one if it already exists
+     */
+    protected function createConfigurator( $object )
     {
-        $this->configurator = new ConfigurationStore( $this->pdo, $this->inflector->getTraitProperties(), $this->inflector->getClassProperties() );
-        var_dump($this->configurator);
+        if( !empty( $this->configurator ) )
+            return $this->configurator;
+
+        $inflector = new PersistenceInflector( $object );
+        $this->configurator = new ConfigurationStore( $this->pdo, $inflector->getTraitProperties(), $inflector->getClassProperties() );
     }
 
 }
