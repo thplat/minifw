@@ -15,12 +15,14 @@ foreach( $providers['providers'] AS $provider )
 // Just a Test PDO connection. Needs to be moved into it's
 // own service
 
-$container->share('PDO');
-$container->define('PDO', [
+$container->share('App\Database\Adapters\PDOAdapter');
+$container->define('App\Database\Adapters\PDOAdapter', [
     ':dsn' => 'mysql:dbname=auryn;host=localhost',
     ':username' => 'root',
     ':passwd' => ''
 ]);
+
+$container->alias('App\Database\Interfaces\Adapter', 'App\Database\Adapters\PDOAdapter');
 
 // Dispatch a Request
 

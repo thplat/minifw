@@ -2,7 +2,8 @@
 
 namespace App\Minimap;
 
-use PDO;
+use App\Minimap\EntityInflectorFactory;
+use App\Database\Interfaces\Adapter;
 
 /**
  * Class PersistenceManager
@@ -14,35 +15,24 @@ use PDO;
  */
 class PersistenceManager {
 
-    protected $pdo;
-    protected $inflector;
+    protected $db;
+    protected $inflectorFactory;
 
     protected $configurator;
 
-    public function __construct( PDO $pdo, ActionFactory $actionFactory )
+    public function __construct( Adapter $db, EntityInflectorFactory $inflectorFactory )
     {
-        $this->pdo = $pdo;
+        $this->db = $db;
+        $this->inflectorFactory = $inflectorFactory;
     }
 
     public function persist( $object )
     {
-        $this->createConfigurator( $object );
-    }
 
-    /**
-     * @param $object
-     * @throws Exceptions\ConfigurationTraitNotFoundException
-     *
-     * Creates an ORM Configuration Object or returns
-     * the current one if it already exists
-     */
-    protected function createConfigurator( $object )
-    {
-        if( !empty( $this->configurator ) )
-            return $this->configurator;
-
-        $inflector = new PersistenceInflector( $object );
-        $this->configurator = new ConfigurationStore( $this->pdo, $inflector->getTraitProperties(), $inflector->getClassProperties() );
+        $inflectedEntity = $this->inflectorFactory->create( $object );
+        echo "<pre>";
+        var_dump( $inflectedEntity );
+        echo "</pre>";
     }
 
 }

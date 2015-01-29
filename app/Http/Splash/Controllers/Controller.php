@@ -19,6 +19,7 @@ class Controller {
         /**
          * Example ORM usage
          */
+        echo "Test";
         $user = new \App\User\User('thomas', 21, 'thomas@devsmash.de');
         $this->manager->persist( $user );
     }
